@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import AdminLayout from "../../_components/admin/layout";
+import ClientLayout from "../../_components/layout/index";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,8 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AdminLayout>
+    <ClientLayout>
       {children}
-    </AdminLayout>
+    </ClientLayout>
   );
 }
+// http://localhost:3000/home => http://localhost:3000
+// http://localhost:3000/ => http://localhost:3000
+
+// config router
