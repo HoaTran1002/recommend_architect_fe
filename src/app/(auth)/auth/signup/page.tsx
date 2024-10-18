@@ -1,5 +1,5 @@
 import SingupForm from "./signup-form";
 
-export default function App() {
+export default function Singup() {
   return <SingupForm/>
 }

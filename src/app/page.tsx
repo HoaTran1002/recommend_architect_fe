@@ -1,6 +1,9 @@
-import Image from "next/image";
-import ListItem from "./_components/list/courseCard.list";
+import React from 'react';
+import Home from './pages/home';
 
-export default function Home() {
-  return (<ListItem></ListItem>)
+export default function HomePage() {
+  return (
+    <Home/>
+)
 }
+

@@ -23,7 +23,7 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
 const ListItem: React.FC = () => (
   <List
     itemLayout="vertical"
-    size="large"
+    size="default"
     // pagination={{
     //   onChange: (page) => {
     //     console.log(page);
