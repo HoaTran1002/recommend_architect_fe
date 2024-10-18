@@ -1,36 +1,21 @@
 "use client"
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import React from 'react';
+import FooterCustomize from './footer';
+import BreadcrumbCustomize from './breadcrumb';
+import HeaderCustomize from './header';
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
-const App: React.FC<{children:React.ReactNode}> = ({children}) => (
+const ClientLayout: React.FC<{children:React.ReactNode}> = ({children}) => (
   <Layout className="layout">
-    <Header>
-      <div className="logo" />
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['2']}
-        items={new Array(15).fill(null).map((_, index) => {
-          const key = index + 1;
-          return {
-            key,
-            label: `nav ${key}`,
-          };
-        })}
-      />
-    </Header>
+    <HeaderCustomize></HeaderCustomize>
     <Content style={{ padding: '0 50px' }}>
-      <Breadcrumb style={{ margin: '16px 0' }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
-      </Breadcrumb>
+      <BreadcrumbCustomize></BreadcrumbCustomize>
       <div className="site-layout-content">{children}</div>
     </Content>
-    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+    <FooterCustomize></FooterCustomize>
   </Layout>
 );
 
-export default App;
+export default ClientLayout;

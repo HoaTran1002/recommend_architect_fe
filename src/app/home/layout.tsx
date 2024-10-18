@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import ClientLayout from "../../_components/layout/index";
+import ClientLayout from "../_components/layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +19,3 @@ export default function RootLayout({
     </ClientLayout>
   );
 }
-// http://localhost:3000/home => http://localhost:3000
-// http://localhost:3000/ => http://localhost:3000
-
-// config router
