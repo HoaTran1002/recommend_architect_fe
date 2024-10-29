@@ -1,61 +1,10 @@
-"use client"
-import React, { useState } from 'react';
-import type { CascaderProps } from 'antd';
-import {
-  AutoComplete,
-  Button,
-  Cascader,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-} from 'antd';
+"use client";
+import React from "react";
+import { Button, Form, Input, Checkbox, Select, InputNumber, message } from "antd";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const { Option } = Select;
-
-interface DataNodeType {
-  value: string;
-  label: string;
-  children?: DataNodeType[];
-}
-
-const residences: CascaderProps<DataNodeType>['options'] = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const formItemLayout = {
   labelCol: {
@@ -70,56 +19,38 @@ const formItemLayout = {
 
 const tailFormItemLayout = {
   wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
+    xs: { span: 24, offset: 0 },
+    sm: { span: 16, offset: 8 },
   },
 };
 
-const App: React.FC = () => {
+const SignUpForm: React.FC = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
-  };
+  const onFinish = async (values: any) => {
+    try {
 
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  );
+      console.log("Submitted Values: ", values);
+  
 
-  const suffixSelector = (
-    <Form.Item name="suffix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="USD">$</Option>
-        <Option value="CNY">¥</Option>
-      </Select>
-    </Form.Item>
-  );
-
-  const [autoCompleteResult, setAutoCompleteResult] = useState<string[]>([]);
-
-  const onWebsiteChange = (value: string) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
+      const response = await axios.post('http://localhost:3000/auth/signup', {
+        email: values.email,
+        userName: values.userName,
+        password: values.password,
+        passwordConfirm: values.confirm,
+      });
+  
+      Cookies.set('accessToken', response.data.accessToken);
+      Cookies.set('refreshToken', response.data.refreshToken);
+  
+      window.location.href = '/';
+      
+      message.success('Đăng ký thành công!');
+    } catch (error: any) {
+      console.error("Registration Error: ", error.response?.data);
+      message.error('Đăng ký thất bại: ' + error.response?.data.message || 'Lỗi không xác định');
     }
   };
-
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
 
   return (
     <Form
@@ -127,7 +58,7 @@ const App: React.FC = () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }}
+      initialValues={{ prefix: "84" }}
       style={{ maxWidth: 600 }}
       scrollToFirstError
     >
@@ -135,15 +66,17 @@ const App: React.FC = () => {
         name="email"
         label="E-mail"
         rules={[
-          {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
-            required: true,
-            message: 'Please input your E-mail!',
-          },
+          { type: "email", message: "The input is not valid E-mail!" },
+          { required: true, message: "Please input your E-mail!" },
         ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="userName"
+        label="User Name"
+        rules={[{ required: true, message: "Please input your User Name!", whitespace: true }]}
       >
         <Input />
       </Form.Item>
@@ -151,12 +84,7 @@ const App: React.FC = () => {
       <Form.Item
         name="password"
         label="Password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
+        rules={[{ required: true, message: "Please input your password!" }]}
         hasFeedback
       >
         <Input.Password />
@@ -165,19 +93,16 @@ const App: React.FC = () => {
       <Form.Item
         name="confirm"
         label="Confirm Password"
-        dependencies={['password']}
+        dependencies={["password"]}
         hasFeedback
         rules={[
-          {
-            required: true,
-            message: 'Please confirm your password!',
-          },
+          { required: true, message: "Please confirm your password!" },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
+              if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error('The new password that you entered do not match!'));
+              return Promise.reject(new Error("The passwords do not match!"));
             },
           }),
         ]}
@@ -185,103 +110,59 @@ const App: React.FC = () => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
-        name="nickname"
-        label="Nickname"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
-      >
+      <Form.Item name="address" label="Address">
+        <Input />
+      </Form.Item>
+
+      <Form.Item name="phoneNumber" label="Phone Number">
         <Input />
       </Form.Item>
 
       <Form.Item
-        name="residence"
-        label="Habitual Residence"
-        rules={[
-          { type: 'array', required: true, message: 'Please select your habitual residence!' },
-        ]}
+        name="age"
+        label="Age"
+        rules={[{ type: "number", min: 0, max: 120, message: "Please enter a valid age!" }]}
       >
-        <Cascader options={residences} />
+        <InputNumber />
       </Form.Item>
 
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[{ required: true, message: 'Please input your phone number!' }]}
-      >
-        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item
-        name="donation"
-        label="Donation"
-        rules={[{ required: true, message: 'Please input donation amount!' }]}
-      >
-        <InputNumber addonAfter={suffixSelector} style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item
-        name="website"
-        label="Website"
-        rules={[{ required: true, message: 'Please input website!' }]}
-      >
-        <AutoComplete options={websiteOptions} onChange={onWebsiteChange} placeholder="website">
-          <Input />
-        </AutoComplete>
-      </Form.Item>
-
-      <Form.Item
-        name="intro"
-        label="Intro"
-        rules={[{ required: true, message: 'Please input Intro' }]}
-      >
-        <Input.TextArea showCount maxLength={100} />
-      </Form.Item>
-
-      <Form.Item
-        name="gender"
-        label="Gender"
-        rules={[{ required: true, message: 'Please select gender!' }]}
-      >
-        <Select placeholder="select your gender">
+      <Form.Item name="gender" label="Gender">
+        <Select placeholder="Select your gender">
           <Option value="male">Male</Option>
           <Option value="female">Female</Option>
           <Option value="other">Other</Option>
         </Select>
       </Form.Item>
 
-      <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[{ required: true, message: 'Please input the captcha you got!' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get captcha</Button>
-          </Col>
-        </Row>
+      <Form.Item name="preferredCategories" label="Preferred Categories">
+        <Select mode="multiple" placeholder="Select preferred categories">
+          <Option value="electronics">Electronics</Option>
+          <Option value="fashion">Fashion</Option>
+          <Option value="books">Books</Option>
+          <Option value="sports">Sports</Option>
+          <Option value="home">Home</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item name="interests" label="Interests">
+        <Select mode="tags" placeholder="Add your interests">
+        </Select>
       </Form.Item>
 
       <Form.Item
         name="agreement"
         valuePropName="checked"
-        rules={[
-          {
-            validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
-          },
-        ]}
+        rules={[{
+          validator: (_, value) =>
+            value ? Promise.resolve() : Promise.reject(new Error("Should accept agreement")),
+        }]}
         {...tailFormItemLayout}
       >
         <Checkbox>
           I have read the <a href="">agreement</a>
         </Checkbox>
       </Form.Item>
+
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
           Register
@@ -291,4 +172,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default SignUpForm;
