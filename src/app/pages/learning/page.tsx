@@ -1,4 +1,4 @@
-import CourseGridCustomize from "@/app/_components/grid/courseGrid";
+import CourseGridCustomize from "@/app/pages/home/components/courseGrid";
 
 export default function LearningPage(){
     return (
