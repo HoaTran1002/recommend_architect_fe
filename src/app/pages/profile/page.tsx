@@ -23,6 +23,7 @@ import {
   InfoCircleOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import ClientLayout from "@/app/_components/layout";
 export interface User {
   email: string;
   userName: string;
@@ -108,6 +109,7 @@ const Profile: React.FC = () => {
   if (loading) return <Spin tip="Loading..." />;
 
   return (
+    <ClientLayout>
     <Row justify="center" style={{ marginTop: 20 }}>
       <Col span={12} style={{ minWidth: 800 }}>
         <Card title="User Profile" bordered={false}>
@@ -227,6 +229,8 @@ const Profile: React.FC = () => {
         </Card>
       </Col>
     </Row>
+    </ClientLayout>
+
   );
 };
 

@@ -1,5 +1,9 @@
+import ClientLayout from "@/app/_components/layout";
 import FormLogin from "./login-form";
 
 export default function Login(){
-  return <FormLogin/>
+  return <ClientLayout>
+
+    <FormLogin/>
+  </ClientLayout>
 }

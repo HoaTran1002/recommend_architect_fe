@@ -17,7 +17,6 @@ const { Header } = Layout;
 
 const itemsHeader: ItemHeader[] = [
   { key: "1w", label: "Home", path: "/" },
-  { key: "d2", label: "Courses", path: "/pages/courses" },
   { key: "6ov", label: "Profile", path: "/pages/profile" },
   { key: "d4", label: "Login", path: "/auth/login" },
   { key: "5v", label: "Signup", path: "/auth/signup" },
@@ -63,7 +62,7 @@ const HeaderCustomize: React.FC = () => {
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
             {itemsHeader.map((item) => {
               // Ẩn các tab không cần thiết nếu chưa đăng nhập
-              if (!isLoggedIn && ["d2", "6ov"].includes(item.key)) {
+              if (!isLoggedIn && [ "6ov"].includes(item.key)) {
                 return null;
               }
 

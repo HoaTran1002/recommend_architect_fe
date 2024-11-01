@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:3000/recommendation";
 
-// Định nghĩa kiểu dữ liệu cho sản phẩm và phản hồi từ API
 export interface Product {
   _id: string;
   name: string;
@@ -15,15 +16,11 @@ export interface RecommendationResponse {
   nextCursor: string | null;
   hasMore: boolean;
 }
-
-// export interface SearchResponse {
-//   products: Product[];
-//   nextCursor: string | null;
-//   hasMore: boolean;
-// }
 export interface ICourse {
+  _id: string;
   avatar?: string;
   pathImage?: string;
+  videoUrl?:string;
   title: string;
   description: string;
   price: number;
@@ -49,15 +46,13 @@ export interface ICourse {
   category: string;
 }
 export interface SearchResponse {
-  nextCursor: string | null; // Lưu trữ cursor
-  hasMore: boolean; // Trạng thái có sản phẩm thêm hay không
-  data: ICourse[]; // Mảng sản phẩm
+  nextCursor: string | null; 
+  hasMore: boolean; 
+  data: ICourse[];
 }
 
 export async function recommendProductsWhenSearch(
-  query: string,
-  cursor: string | null // Thêm tham số cursor
-): Promise<SearchResponse> {
+query: string, cursor: string | null, selectedCategory: string | undefined): Promise<SearchResponse> {
   const response = await fetch(
     `http://localhost:3000/recommendation/search?term=${query}${
       cursor ? `&cursor=${cursor}` : ""
@@ -69,12 +64,12 @@ export async function recommendProductsWhenSearch(
   }
 
   const data = await response.json();
-  console.log("Response data:", data); // Kiểm tra JSON trả về
+  console.log("Response data:", data);
 
   return {
-    data: data.products || [], // Mảng sản phẩm
-    nextCursor: data.nextCursor || null, // Lưu trữ cursor tiếp theo
-    hasMore: data.hasMore || false, // Kiểm tra có sản phẩm thêm hay không
+    data: data.products || [], 
+    nextCursor: data.nextCursor || null, 
+    hasMore: data.hasMore || false, 
   };
 }
 

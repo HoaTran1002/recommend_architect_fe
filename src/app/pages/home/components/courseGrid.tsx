@@ -4,21 +4,16 @@ import CardCustomize from "@/app/_components/card/cardCourse";
 import { ICourse } from "@/app/api/recommendationService";
 
 interface CourseGridCustomizeProps {
-  data: ICourse[];
+  data: ICourse[]; // Nhận mảng sản phẩm
 }
 
 const CourseGridCustomize: React.FC<CourseGridCustomizeProps> = ({ data }) => (
   <List
-    grid={{ gutter: 10, column: 5 }}
+    grid={{ gutter: 10, column: 5 }} // Thiết lập layout cho danh sách
     dataSource={data}
     renderItem={(item) => (
       <List.Item>
-        <CardCustomize
-          avatar={item.avatar}
-          title={item.title}
-          description={item.description}
-          pathImage={item.pathImage}
-        />
+        <CardCustomize data={item} /> {/* Gửi đối tượng sản phẩm vào CardCustomize */}
       </List.Item>
     )}
   />

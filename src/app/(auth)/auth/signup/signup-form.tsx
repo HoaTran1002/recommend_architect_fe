@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import { Button, Form, Input, Checkbox, Select, InputNumber, message } from "antd";

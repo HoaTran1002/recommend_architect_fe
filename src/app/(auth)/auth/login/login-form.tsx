@@ -1,15 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import Cookies from "js-cookie"; // Để sử dụng cookie
-
-enum GenderEnum {
-  female = "female",
-  male = "male",
-  other = "other",
-}
+import Cookies from "js-cookie";
 
 interface IFormInput {
   email: string;
@@ -27,15 +22,18 @@ export default function FormLogin() {
         password: data.password,
       });
 
-      // Lưu accessToken và refreshToken vào cookie
       Cookies.set("accessToken", response.data.accessToken);
       Cookies.set("refreshToken", response.data.refreshToken);
 
-      // Chuyển hướng tới trang chính sau khi đăng nhập thành công
-      window.location.href = "/";
+      const userRole = response.data.role;
+      console.log(userRole)
+      if (userRole === 'admin') {
+        window.location.href = "/dashboard";
+      } else {
+        window.location.href = "/";
+      }
     } catch (error: any) {
       console.error("Login Error: ", error.response?.data);
-      // Hiển thị thông báo lỗi
       setError("email", {
         type: "manual",
         message: error.response?.data.message || "Đăng nhập thất bại",
