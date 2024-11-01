@@ -3,8 +3,15 @@ import { List } from "antd";
 import CardCustomize from "@/app/_components/card/cardCourse";
 import { ICourse } from "@/app/api/recommendationService";
 
+// interface Course {
+//   avatar: string;
+//   title: string;
+//   description: string;
+//   pathImage: string;
+// }
+
 interface CourseGridCustomizeProps {
-  data: ICourse[];
+  data: ICourse[]; // Đảm bảo kiểu dữ liệu tương ứng với cấu trúc dữ liệu trả về
 }
 
 const CourseGridCustomize: React.FC<CourseGridCustomizeProps> = ({ data }) => (

@@ -1,20 +1,20 @@
 "use client";
 
-import { Layout } from 'antd';
-import FooterCustomize from './footer';
-import HeaderCustomize from './header';
-import Breadcrumbs from '../breadcrumb/breadCrumbs';
-import React from 'react';
-import ContentComponent from './content';
+import { Layout } from "antd";
+import FooterCustomize from "./footer";
+import HeaderCustomize from "./header";
+import Breadcrumbs from "../breadcrumb/breadCrumbs";
+import React from "react";
+import ContentComponent from "./content";
 
-const ClientLayout = ({ children }:{children:React.ReactNode}) => (
+const ClientLayout = ({ children }: { children: React.ReactNode }) => (
   <Layout>
     <HeaderCustomize />
-    
-      <ContentComponent>
+
+    <ContentComponent>
       {/* <Breadcrumbs /> */}
-        {children}
-      </ContentComponent>
+      {children}
+    </ContentComponent>
 
     <FooterCustomize />
   </Layout>
